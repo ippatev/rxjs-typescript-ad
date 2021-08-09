@@ -5,10 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-  <script defer src="index.js"></script></head>
+  </head>
   <body>
     <div class="progress-bar"></div>
-    <div style="height: 1000px"></div>
+    <div style="height: 1000px">
+      <h2 id="countdown"></h2>
+      <div id="message"></div>
+    </div>
   </body>
 
   <style>
@@ -19,7 +22,7 @@
     .progress-bar {
       position: fixed;
       top: 0;
-      height: 4px;
+      height: 20px;
       width: 0%;
       background: pink;
     }

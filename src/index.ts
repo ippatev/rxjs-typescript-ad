@@ -1,60 +1,71 @@
+import { from, fromEvent, interval } from "rxjs";
 import {
-  interval,
-  of,
-  queueScheduler,
-  defer,
-  timer,
-  SchedulerLike,
-  forkJoin,
-  asapScheduler,
-} from "rxjs";
-import { async } from "rxjs/internal/scheduler/async";
-import { AsyncScheduler } from "rxjs/internal/scheduler/AsyncScheduler";
-import {
-  delay,
-  switchMap,
-  tap,
-  flatMap,
+  filter,
   map,
-  repeat,
-  delayWhen,
-  concatMap,
+  mapTo,
+  reduce,
+  scan,
+  startWith,
   take,
-  observeOn,
-  subscribeOn,
+  takeWhile,
 } from "rxjs/operators";
 
-const myPromise = (val) =>
-  new Promise((resolve) =>
-    setTimeout(() => resolve(`Promise Resolved: ${val}`), 5000)
-  );
+// el's
+const progressBar: HTMLElement = document.querySelector(".progress-bar");
+const countdown: HTMLElement = document.getElementById("countdown");
+const message: HTMLElement = document.getElementById("message");
 
-/*
-  when all observables complete, give the last
-  emitted value from each as an array
-*/
-const example = forkJoin({
-  //emit 'Hello' immediately
-  sourceOne: of("Hello"),
-  //emit 'World' after 1 second
-  sourceTwo: of("World").pipe(delay(1000)),
-  //emit 0 after 1 second
-  sourceThree: interval(1000).pipe(take(1)),
-  //emit 0...1 in 1 second interval
-  sourceFour: interval(1000).pipe(take(2)),
-  //promise that resolves to 'Promise Resolved' after 5 seconds
-  sourceFive: myPromise("RESULT"),
+const scroll$ = fromEvent(document, "scroll");
+const progress$ = scroll$.pipe(
+  // percent progress
+  map(({ target }: any) => calculateScrollPercent(target.documentElement))
+);
+
+progress$.subscribe((percent) => {
+  progressBar.style.width = `${percent}%`;
 });
-/*
- * Output:
- * {
- *   sourceOne: "Hello",
- *   sourceTwo: "World",
- *   sourceThree: 0,
- *   sourceFour: 1,
- *   sourceFive: "Promise Resolved: RESULT"
- * }
- */
-example.pipe(observeOn(async)).subscribe((val) => {
-  debugger;
-});
+
+// helpers
+function calculateScrollPercent(el) {
+  const { scrollTop, scrollHeight, clientHeight } = el;
+
+  return (scrollTop / (scrollHeight - clientHeight)) * 100;
+}
+
+const nums = [1, 2, 3, 4, 5];
+const user = [
+  { name: "Brain", loggedIn: false, token: null },
+  { name: "Brain", loggedIn: true, token: "abc" },
+  { name: "Brain", loggedIn: true, token: "123" },
+];
+
+const totalReducer = (acc, current) => {
+  return acc + current;
+};
+
+const state$ = from(user).pipe(
+  scan((acc, current) => {
+    return { ...acc, ...current };
+  })
+);
+
+const name$ = state$.pipe(map((state) => state.name));
+
+const counter$ = interval(1000);
+
+counter$
+  .pipe(
+    mapTo(-1),
+    scan((acc, current) => {
+      return acc + current;
+    }, 10),
+    filter((v) => v >= 0)
+  )
+  .subscribe((v) => {
+    countdown.innerHTML = `${v}`;
+    if (!v) {
+      message.innerHTML = "Liftoff!";
+    }
+  });
+
+counter$.subscribe(console.log);

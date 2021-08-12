@@ -1,5 +1,8 @@
 import { asyncScheduler, from, fromEvent, interval, of } from "rxjs";
+import { ajax } from "rxjs/ajax";
 import {
+  audit,
+  auditTime,
   debounce,
   debounceTime,
   distinctUntilChanged,
@@ -8,6 +11,8 @@ import {
   first,
   map,
   mapTo,
+  mergeAll,
+  mergeMap,
   pluck,
   reduce,
   sample,
@@ -30,7 +35,7 @@ const message: HTMLElement = document.getElementById("message");
 
 const scroll$ = fromEvent(document, "scroll");
 const click$ = fromEvent<MouseEvent>(document, "click");
-const input$ = fromEvent(textInput, "keyup");
+const input$ = fromEvent<InputEvent>(textInput, "keyup");
 const timer$ = interval(1000);
 
 const progress$ = scroll$.pipe(
@@ -198,3 +203,20 @@ click$.pipe(
 );
 // .subscribe(console.log);
 timer$.pipe(sample(click$)).subscribe(console.log);
+
+// Audit & AuditTime
+click$.pipe(
+  auditTime(4000),
+  map(({ clientX, clientY }) => ({ clientX, clientY }))
+);
+
+// MergeMap & MergeAll & ajax
+input$.pipe(
+  debounceTime(1000),
+  mergeMap((e) => {
+    const term = e.target.value;
+    return ajax.getJSON(`https://api.github.com/users/${term}`);
+  })
+  // mergeAll() // not a mergeMap
+);
+// .subscribe(console.log);

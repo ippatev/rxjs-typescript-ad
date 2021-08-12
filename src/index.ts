@@ -1,4 +1,4 @@
-import { asyncScheduler, from, fromEvent, interval, of } from "rxjs";
+import { asyncScheduler, from, fromEvent, interval, of, timer } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import {
   audit,
@@ -35,6 +35,8 @@ const message: HTMLElement = document.getElementById("message");
 
 const scroll$ = fromEvent(document, "scroll");
 const click$ = fromEvent<MouseEvent>(document, "click");
+const mousedown$ = fromEvent(document, "mousedown");
+const mouseup$ = fromEvent(document, "mouseup");
 const input$ = fromEvent<InputEvent>(textInput, "keyup");
 const timer$ = interval(1000);
 
@@ -210,13 +212,34 @@ click$.pipe(
   map(({ clientX, clientY }) => ({ clientX, clientY }))
 );
 
-// MergeMap & MergeAll & ajax
+// MergeAll & ajax
 input$.pipe(
-  debounceTime(1000),
-  mergeMap((e) => {
+  map((e) => {
     const term = e.target.value;
     return ajax.getJSON(`https://api.github.com/users/${term}`);
-  })
-  // mergeAll() // not a mergeMap
+  }),
+  debounceTime(1000),
+  mergeAll() // not a mergeMap
 );
 // .subscribe(console.log);
+
+// MergeMap
+mousedown$
+  .pipe(mergeMap(() => timer$.pipe(takeUntil(mouseup$))))
+  .subscribe(console.log);
+
+const coordinates$ = click$.pipe(
+  map(({ clientX, clientY }) => ({
+    x: clientX,
+    y: clientY,
+  }))
+);
+const coordinatesWithSave$ = coordinates$.pipe(
+  mergeMap((coords) =>
+    ajax.post(
+      "https://run.mocky.io/v3/316cfccf-2e5a-474d-9946-c350896b1906",
+      coords
+    )
+  )
+);
+coordinatesWithSave$.subscribe(console.log);

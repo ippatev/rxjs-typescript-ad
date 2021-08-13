@@ -213,20 +213,19 @@ click$.pipe(
 );
 
 // MergeAll & ajax
-input$.pipe(
-  map((e) => {
-    const term = e.target.value;
-    return ajax.getJSON(`https://api.github.com/users/${term}`);
-  }),
-  debounceTime(1000),
-  mergeAll() // not a mergeMap
-);
+// input$.pipe(
+//   map((e) => {
+//     const term = e.target.value;
+//     return ajax.getJSON(`https://api.github.com/users/${term}`);
+//   }),
+//   debounceTime(1000),
+//   mergeAll() // not a mergeMap
+// );
 // .subscribe(console.log);
 
 // MergeMap
-mousedown$
-  .pipe(mergeMap(() => timer$.pipe(takeUntil(mouseup$))))
-  .subscribe(console.log);
+mousedown$.pipe(mergeMap(() => timer$.pipe(takeUntil(mouseup$))));
+// .subscribe(console.log);
 
 const coordinates$ = click$.pipe(
   map(({ clientX, clientY }) => ({
@@ -242,4 +241,7 @@ const coordinatesWithSave$ = coordinates$.pipe(
     )
   )
 );
-coordinatesWithSave$.subscribe(console.log);
+// coordinatesWithSave$.subscribe(console.log);
+
+// SwitchMap
+click$.pipe(mergeMap(() => timer$)).subscribe(console.log);

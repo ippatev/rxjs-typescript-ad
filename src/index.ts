@@ -11,6 +11,7 @@ import {
   first,
   map,
   mapTo,
+  merge,
   mergeAll,
   mergeMap,
   pluck,
@@ -19,6 +20,7 @@ import {
   sampleTime,
   scan,
   startWith,
+  switchMap,
   take,
   takeUntil,
   takeWhile,
@@ -27,11 +29,17 @@ import {
   throttleTime,
 } from "rxjs/operators";
 
+// api's
+const BASE_URL = "https://api.openbrewerydb.org/breweries";
+
 // el's
 const progressBar: HTMLElement = document.querySelector(".progress-bar");
 const textInput: HTMLElement = document.getElementById("text-input");
 const countdown: HTMLElement = document.getElementById("countdown");
 const message: HTMLElement = document.getElementById("message");
+const typeaheadContainer: HTMLElement = document.getElementById(
+  "typeahead-container"
+);
 
 const scroll$ = fromEvent(document, "scroll");
 const click$ = fromEvent<MouseEvent>(document, "click");
@@ -204,7 +212,7 @@ click$.pipe(
   map(({ clientX, clientY }) => ({ clientX, clientY }))
 );
 // .subscribe(console.log);
-timer$.pipe(sample(click$)).subscribe(console.log);
+// timer$.pipe(sample(click$)).subscribe(console.log);
 
 // Audit & AuditTime
 click$.pipe(
@@ -244,4 +252,17 @@ const coordinatesWithSave$ = coordinates$.pipe(
 // coordinatesWithSave$.subscribe(console.log);
 
 // SwitchMap
-click$.pipe(mergeMap(() => timer$)).subscribe(console.log);
+input$
+  .pipe(
+    debounceTime(200),
+    pluck("target", "value"),
+    distinctUntilChanged(),
+    switchMap((searchTerm) => {
+      return ajax.getJSON(`
+      ${BASE_URL}?by_name=${searchTerm}`);
+    })
+  )
+  .subscribe((res: any[]) => {
+    // update ui
+    typeaheadContainer.innerHTML = res.map((b) => b.name).join("<br>");
+  });

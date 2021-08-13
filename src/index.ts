@@ -1,12 +1,23 @@
-import { asyncScheduler, from, fromEvent, interval, of, timer } from "rxjs";
+import {
+  asyncScheduler,
+  concat,
+  from,
+  fromEvent,
+  interval,
+  of,
+  timer,
+} from "rxjs";
 import { ajax } from "rxjs/ajax";
 import {
   audit,
   auditTime,
+  concatMap,
   debounce,
   debounceTime,
+  delay,
   distinctUntilChanged,
   distinctUntilKeyChanged,
+  exhaustMap,
   filter,
   first,
   map,
@@ -40,13 +51,17 @@ const message: HTMLElement = document.getElementById("message");
 const typeaheadContainer: HTMLElement = document.getElementById(
   "typeahead-container"
 );
+const radioButtons: any = document.querySelectorAll(".radio-option");
+const loginButton: any = document.getElementById("login");
 
+const timer$ = interval(1000);
 const scroll$ = fromEvent(document, "scroll");
 const click$ = fromEvent<MouseEvent>(document, "click");
 const mousedown$ = fromEvent(document, "mousedown");
 const mouseup$ = fromEvent(document, "mouseup");
 const input$ = fromEvent<InputEvent>(textInput, "keyup");
-const timer$ = interval(1000);
+const answerChange$ = fromEvent(radioButtons, "click");
+const login$ = fromEvent(loginButton, "click");
 
 const progress$ = scroll$.pipe(
   throttleTime(30, asyncScheduler, {
@@ -252,17 +267,40 @@ const coordinatesWithSave$ = coordinates$.pipe(
 // coordinatesWithSave$.subscribe(console.log);
 
 // SwitchMap
-input$
-  .pipe(
-    debounceTime(200),
-    pluck("target", "value"),
-    distinctUntilChanged(),
-    switchMap((searchTerm) => {
-      return ajax.getJSON(`
+input$.pipe(
+  debounceTime(200),
+  pluck("target", "value"),
+  distinctUntilChanged(),
+  switchMap((searchTerm) => {
+    return ajax.getJSON(`
       ${BASE_URL}?by_name=${searchTerm}`);
-    })
-  )
-  .subscribe((res: any[]) => {
-    // update ui
-    typeaheadContainer.innerHTML = res.map((b) => b.name).join("<br>");
+  })
+);
+// .subscribe((res: any[]) => {
+//   // update ui
+//   typeaheadContainer.innerHTML = res.map((b) => b.name).join("<br>");
+// });
+
+// ConcatMap
+// click$.pipe(concatMap(() => timer$.pipe(take(3)))).subscribe(console.log);
+const saveAnswer = (answer) => {
+  return of(`Saved ${answer}`).pipe(delay(1500));
+};
+
+answerChange$.pipe(
+  pluck("target", "value"),
+  concatMap((event) => saveAnswer(event))
+);
+// .subscribe(console.log);
+
+// ExhaustMap
+// click$.pipe(exhaustMap(() => timer$.pipe(take(3)))).subscribe(console.log);
+const authenticateUser = (email, password) => {
+  return ajax.post("https://reqres.in/api/login", {
+    email,
+    password,
   });
+};
+login$
+  .pipe(exhaustMap(() => authenticateUser("eve.holt@reqres.in", "cityslicka")))
+  .subscribe(console.log);

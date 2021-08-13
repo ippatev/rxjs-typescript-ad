@@ -8,10 +8,50 @@
   </head>
   <body>
     <div class="progress-bar"></div>
-    <div style="margin: 20px">
+    <section style="margin: 20px">
       <input id="text-input" type="text" placeholder="text" />
       <div id="typeahead-container"></div>
-    </div>
+    </section>
+    <section>
+      <div>
+        <input
+          type="radio"
+          class="radio-option"
+          name="operator"
+          value="mergeMap"
+        />
+        <label for="mergeMap">mergeMap </label>
+      </div>
+      <div>
+        <input
+          type="radio"
+          class="radio-option"
+          name="operator"
+          value="switchMap"
+        />
+        <label for="switchMap">switchMap</label>
+      </div>
+      <div>
+        <input
+          type="radio"
+          class="radio-option"
+          name="operator"
+          value="concatMap"
+        />
+        <label for="concatMap">concatMap</label>
+      </div>
+    </section>
+    <section>
+      <div class="form-group">
+        <label for="email"></label>
+        <input id="email" type="text" name="email" />
+      </div>
+      <div class="form-group">
+        <label for="passowrd"></label>
+        <input id="passwrod" type="password" name="password" />
+      </div>
+      <button id="login" type="button">Login</button>
+    </section>
     <div style="height: 1000px">
       <h2 id="countdown"></h2>
       <div id="message"></div>

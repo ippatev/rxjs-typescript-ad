@@ -6,6 +6,7 @@ import {
   fromEvent,
   interval,
   of,
+  pipe,
   timer,
 } from "rxjs";
 import { ajax } from "rxjs/ajax";
@@ -19,6 +20,7 @@ import {
   delay,
   distinctUntilChanged,
   distinctUntilKeyChanged,
+  endWith,
   exhaustMap,
   filter,
   first,
@@ -331,3 +333,8 @@ input$
     // update ui
     typeaheadContainer.innerHTML = res.map((b) => b.name).join("<br>");
   });
+
+// startWith
+from(nums)
+  .pipe(startWith("a", "b", "c"), endWith("a", "b", "c"))
+  .subscribe(console.log);

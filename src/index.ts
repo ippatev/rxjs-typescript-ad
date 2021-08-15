@@ -1,6 +1,5 @@
 import {
   asyncScheduler,
-  concat,
   empty,
   from,
   fromEvent,
@@ -29,6 +28,7 @@ import {
   merge,
   mergeAll,
   mergeMap,
+  mergeScan,
   pluck,
   reduce,
   sample,
@@ -41,6 +41,7 @@ import {
   takeWhile,
   tap,
   throttle,
+  concat,
   throttleTime,
 } from "rxjs/operators";
 
@@ -309,7 +310,7 @@ login$
   .pipe(exhaustMap(() => authenticateUser("eve.holt@reqres.in", "cityslicka")))
   .subscribe(console.log);
 
-// catchError
+// CatchError
 input$
   .pipe(
     debounceTime(200),
@@ -335,6 +336,20 @@ input$
   });
 
 // startWith
-from(nums)
-  .pipe(startWith("a", "b", "c"), endWith("a", "b", "c"))
+from(nums).pipe(startWith("a", "b", "c"), endWith("a", "b", "c"));
+// .subscribe(console.log);
+
+// Concat
+// concat(timer$.pipe(take(3)), timer$.pipe(take(5))); concat imports with "rxjs" not operator
+const delayed$ = empty().pipe(delay(1000));
+delayed$
+  .pipe(
+    concat(
+      delayed$.pipe(startWith("3...")),
+      delayed$.pipe(startWith("2...")),
+      delayed$.pipe(startWith("1...")),
+      delayed$.pipe(startWith("Go!"))
+    ),
+    startWith("Get Ready?")
+  )
   .subscribe(console.log);

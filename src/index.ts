@@ -7,6 +7,7 @@ import {
   of,
   pipe,
   timer,
+  merge,
 } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import {
@@ -25,7 +26,6 @@ import {
   first,
   map,
   mapTo,
-  merge,
   mergeAll,
   mergeMap,
   mergeScan,
@@ -342,14 +342,17 @@ from(nums).pipe(startWith("a", "b", "c"), endWith("a", "b", "c"));
 // Concat
 // concat(timer$.pipe(take(3)), timer$.pipe(take(5))); concat imports with "rxjs" not operator
 const delayed$ = empty().pipe(delay(1000));
-delayed$
-  .pipe(
-    concat(
-      delayed$.pipe(startWith("3...")),
-      delayed$.pipe(startWith("2...")),
-      delayed$.pipe(startWith("1...")),
-      delayed$.pipe(startWith("Go!"))
-    ),
-    startWith("Get Ready?")
-  )
-  .subscribe(console.log);
+delayed$.pipe(
+  concat(
+    delayed$.pipe(startWith("3...")),
+    delayed$.pipe(startWith("2...")),
+    delayed$.pipe(startWith("1...")),
+    delayed$.pipe(startWith("Go!"))
+  ),
+  startWith("Get Ready?")
+);
+// .subscribe(console.log);
+
+// Merge
+const keyup$ = fromEvent(document, "keyup");
+merge(keyup$, click$).subscribe(console.log);

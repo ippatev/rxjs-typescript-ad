@@ -1,6 +1,7 @@
 import {
   asyncScheduler,
   concat,
+  empty,
   from,
   fromEvent,
   interval,
@@ -11,6 +12,7 @@ import { ajax } from "rxjs/ajax";
 import {
   audit,
   auditTime,
+  catchError,
   concatMap,
   debounce,
   debounceTime,
@@ -304,3 +306,28 @@ const authenticateUser = (email, password) => {
 login$
   .pipe(exhaustMap(() => authenticateUser("eve.holt@reqres.in", "cityslicka")))
   .subscribe(console.log);
+
+// catchError
+input$
+  .pipe(
+    debounceTime(200),
+    pluck("target", "value"),
+    distinctUntilChanged(),
+    switchMap((searchTerm) => {
+      return ajax
+        .getJSON(
+          `
+      ${BASE_URL}?by_name=${searchTerm}`
+        )
+        .pipe(
+          catchError((err, caught) => {
+            // ignore
+            return caught;
+          })
+        );
+    })
+  )
+  .subscribe((res: any) => {
+    // update ui
+    typeaheadContainer.innerHTML = res.map((b) => b.name).join("<br>");
+  });

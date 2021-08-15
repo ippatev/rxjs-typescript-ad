@@ -8,6 +8,7 @@ import {
   pipe,
   timer,
   merge,
+  combineLatest,
 } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import {
@@ -43,6 +44,7 @@ import {
   throttle,
   concat,
   throttleTime,
+  withLatestFrom,
 } from "rxjs/operators";
 
 // api's
@@ -58,6 +60,8 @@ const typeaheadContainer: HTMLElement = document.getElementById(
 );
 const radioButtons: any = document.querySelectorAll(".radio-option");
 const loginButton: any = document.getElementById("login");
+const firstNum: HTMLElement = document.getElementById("first");
+const secondNum: HTMLElement = document.getElementById("second");
 
 const timer$ = interval(1000);
 const scroll$ = fromEvent(document, "scroll");
@@ -355,4 +359,23 @@ delayed$.pipe(
 
 // Merge
 const keyup$ = fromEvent(document, "keyup");
-merge(keyup$, click$).subscribe(console.log);
+merge(keyup$, click$);
+// .subscribe(console.log);
+
+// CombineLatest && WithLatestFrom
+combineLatest(keyup$, click$);
+// .subscribe(console.log);
+const keyupAsValue = (el) => {
+  return fromEvent(el, "keyup").pipe(
+    map((event: Event) => (event.target as HTMLInputElement).valueAsNumber)
+  );
+};
+click$.pipe(withLatestFrom(timer$)).subscribe(console.log);
+combineLatest(keyupAsValue(firstNum), keyupAsValue(secondNum))
+  .pipe(
+    filter(([first, second]) => {
+      return !isNaN(first) && !isNaN(second);
+    }),
+    map(([first, second]) => first + second)
+  )
+  .subscribe(console.log);

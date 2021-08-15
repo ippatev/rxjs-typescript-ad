@@ -9,6 +9,7 @@ import {
   timer,
   merge,
   combineLatest,
+  forkJoin,
 } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import {
@@ -370,12 +371,29 @@ const keyupAsValue = (el) => {
     map((event: Event) => (event.target as HTMLInputElement).valueAsNumber)
   );
 };
-click$.pipe(withLatestFrom(timer$)).subscribe(console.log);
-combineLatest(keyupAsValue(firstNum), keyupAsValue(secondNum))
-  .pipe(
-    filter(([first, second]) => {
-      return !isNaN(first) && !isNaN(second);
-    }),
-    map(([first, second]) => first + second)
-  )
-  .subscribe(console.log);
+click$.pipe(withLatestFrom(timer$));
+// .subscribe(console.log);
+combineLatest(keyupAsValue(firstNum), keyupAsValue(secondNum)).pipe(
+  filter(([first, second]) => {
+    return !isNaN(first) && !isNaN(second);
+  }),
+  map(([first, second]) => first + second)
+);
+// .subscribe(console.log);
+
+// ForkJoin
+{
+  const nums$ = of(1, 2, 3);
+  const letters$ = of("a", "b", "c");
+  forkJoin({
+    nums: nums$,
+    letters: letters$.pipe(delay(3000)),
+  });
+  // .subscribe(console.log);
+}
+const GITHUB_API_BASE = "https://api.github.com";
+forkJoin({
+  user: ajax.getJSON(`${GITHUB_API_BASE}/users/ippatev`),
+  repo: ajax.getJSON(`${GITHUB_API_BASE}/users/ippatev/repos`),
+});
+// .subscribe(console.log);

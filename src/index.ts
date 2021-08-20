@@ -4,10 +4,13 @@ import {
   from,
   fromEvent,
   interval,
+  Observable,
   of,
+  Subject,
   timer,
 } from "rxjs";
 import { ajax } from "rxjs/ajax";
+import { MulticastOperator } from "rxjs/internal/operators/multicast";
 import {
   audit,
   auditTime,
@@ -25,11 +28,14 @@ import {
   merge,
   mergeAll,
   mergeMap,
+  multicast,
   pluck,
   reduce,
+  refCount,
   sample,
   sampleTime,
   scan,
+  share,
   startWith,
   switchMap,
   take,
@@ -304,3 +310,44 @@ const authenticateUser = (email, password) => {
 login$
   .pipe(exhaustMap(() => authenticateUser("eve.holt@reqres.in", "cityslicka")))
   .subscribe(console.log);
+
+/* MasterClas  */
+
+// Subjects & Multicast & share & refCount
+// const subject = new Subject();
+const observer = {
+  next: (val) => console.log(val),
+  err: (err) => console.error(err),
+  complete: () => console.log("complete!"),
+};
+// const subscription = subject.subscribe(observer);
+
+// subject.next("Hello");
+
+// const subscriptionTwo = subject.subscribe(observer);
+
+// subject.next("World");
+
+const interval$ = interval(1000).pipe(
+  tap((v) => console.log("new interval ", v))
+);
+const multicastedInterval$: any = interval$.pipe(
+  // multicast(() => new Subject()),
+  // refCount()
+  share()
+);
+// const connectedSub = multicastedInterval$.connect();
+
+// interval$.subscribe(observer);
+// interval$.subscribe(observer);
+
+// interval$.subscribe(subject);
+
+const subOne = multicastedInterval$.subscribe(observer);
+const subTwo = multicastedInterval$.subscribe(observer);
+
+setTimeout(() => {
+  // connectedSub.unsubscribe();
+  subOne.unsubscribe();
+  subTwo.unsubscribe();
+}, 3000);

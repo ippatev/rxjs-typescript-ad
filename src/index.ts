@@ -12,6 +12,7 @@ import {
   merge,
   combineLatest,
   forkJoin,
+  BehaviorSubject,
 } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import { MulticastOperator } from "rxjs/internal/operators/multicast";
@@ -445,4 +446,18 @@ setTimeout(() => {
   // connectedSub.unsubscribe();
   subOne.unsubscribe();
   subTwo.unsubscribe();
+}, 0);
+
+// BehaviorSubject
+const subject = new BehaviorSubject("Hello");
+
+const subscription = subject.subscribe(observer);
+
+
+const subscriptionTwo = subject.subscribe(observer);
+
+subject.next("World");
+
+setTimeout(() => {
+  subject.subscribe(observer);
 }, 3000);

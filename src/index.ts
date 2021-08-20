@@ -1,34 +1,43 @@
 import {
   asyncScheduler,
-  concat,
+  empty,
   from,
   fromEvent,
   interval,
   Observable,
   of,
   Subject,
+  pipe,
   timer,
+  merge,
+  combineLatest,
+  forkJoin,
 } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import { MulticastOperator } from "rxjs/internal/operators/multicast";
 import {
   audit,
   auditTime,
+  catchError,
   concatMap,
   debounce,
   debounceTime,
   delay,
   distinctUntilChanged,
   distinctUntilKeyChanged,
+  endWith,
   exhaustMap,
   filter,
   first,
   map,
   mapTo,
-  merge,
   mergeAll,
   mergeMap,
+<<<<<<< HEAD
   multicast,
+=======
+  mergeScan,
+>>>>>>> b215b1fc6ccfeb287b3c7348b28824525d0d957b
   pluck,
   reduce,
   refCount,
@@ -43,7 +52,9 @@ import {
   takeWhile,
   tap,
   throttle,
+  concat,
   throttleTime,
+  withLatestFrom,
 } from "rxjs/operators";
 
 // api's
@@ -59,6 +70,8 @@ const typeaheadContainer: HTMLElement = document.getElementById(
 );
 const radioButtons: any = document.querySelectorAll(".radio-option");
 const loginButton: any = document.getElementById("login");
+const firstNum: HTMLElement = document.getElementById("first");
+const secondNum: HTMLElement = document.getElementById("second");
 
 const timer$ = interval(1000);
 const scroll$ = fromEvent(document, "scroll");
@@ -351,3 +364,85 @@ setTimeout(() => {
   subOne.unsubscribe();
   subTwo.unsubscribe();
 }, 3000);
+// CatchError
+input$
+  .pipe(
+    debounceTime(200),
+    pluck("target", "value"),
+    distinctUntilChanged(),
+    switchMap((searchTerm) => {
+      return ajax
+        .getJSON(
+          `
+      ${BASE_URL}?by_name=${searchTerm}`
+        )
+        .pipe(
+          catchError((err, caught) => {
+            // ignore
+            return caught;
+          })
+        );
+    })
+  )
+  .subscribe((res: any) => {
+    // update ui
+    typeaheadContainer.innerHTML = res.map((b) => b.name).join("<br>");
+  });
+
+// startWith
+from(nums).pipe(startWith("a", "b", "c"), endWith("a", "b", "c"));
+// .subscribe(console.log);
+
+// Concat
+// concat(timer$.pipe(take(3)), timer$.pipe(take(5))); concat imports with "rxjs" not operator
+const delayed$ = empty().pipe(delay(1000));
+delayed$.pipe(
+  concat(
+    delayed$.pipe(startWith("3...")),
+    delayed$.pipe(startWith("2...")),
+    delayed$.pipe(startWith("1...")),
+    delayed$.pipe(startWith("Go!"))
+  ),
+  startWith("Get Ready?")
+);
+// .subscribe(console.log);
+
+// Merge
+const keyup$ = fromEvent(document, "keyup");
+merge(keyup$, click$);
+// .subscribe(console.log);
+
+// CombineLatest && WithLatestFrom
+combineLatest(keyup$, click$);
+// .subscribe(console.log);
+const keyupAsValue = (el) => {
+  return fromEvent(el, "keyup").pipe(
+    map((event: Event) => (event.target as HTMLInputElement).valueAsNumber)
+  );
+};
+click$.pipe(withLatestFrom(timer$));
+// .subscribe(console.log);
+combineLatest(keyupAsValue(firstNum), keyupAsValue(secondNum)).pipe(
+  filter(([first, second]) => {
+    return !isNaN(first) && !isNaN(second);
+  }),
+  map(([first, second]) => first + second)
+);
+// .subscribe(console.log);
+
+// ForkJoin
+{
+  const nums$ = of(1, 2, 3);
+  const letters$ = of("a", "b", "c");
+  forkJoin({
+    nums: nums$,
+    letters: letters$.pipe(delay(3000)),
+  });
+  // .subscribe(console.log);
+}
+const GITHUB_API_BASE = "https://api.github.com";
+forkJoin({
+  user: ajax.getJSON(`${GITHUB_API_BASE}/users/ippatev`),
+  repo: ajax.getJSON(`${GITHUB_API_BASE}/users/ippatev/repos`),
+});
+// .subscribe(console.log);

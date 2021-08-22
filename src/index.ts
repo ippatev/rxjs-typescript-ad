@@ -54,6 +54,8 @@ import {
   concat,
   throttleTime,
   withLatestFrom,
+  mergeMapTo,
+  shareReplay,
 } from "rxjs/operators";
 
 import { ObservableStore } from "./store";
@@ -485,5 +487,15 @@ const subject = new ReplaySubject(1);
 subject.next("Hello");
 subject.next("World");
 subject.next("Goodbye");
-
 // subject.subscribe(observer);
+
+// ShareReplay
+const ajax$ = ajax(`https://api.github.com/users/octocat`);
+const clickReq$ = click$.pipe(mergeMapTo(ajax$), shareReplay(1, 10000));
+
+clickReq$.subscribe(observer);
+
+setTimeout(() => {
+  console.log("subscribing...");
+  clickReq$.subscribe(observer);
+}, 5000);

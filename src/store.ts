@@ -13,7 +13,7 @@ export class ObservableStore {
     this._store = new BehaviorSubject(initialState);
     this._stateUpdates = new Subject();
 
-    // acc state
+    // accumulate state
     this._stateUpdates
       .pipe(
         scan((acc, curr) => {

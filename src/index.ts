@@ -34,11 +34,8 @@ import {
   mapTo,
   mergeAll,
   mergeMap,
-<<<<<<< HEAD
   multicast,
-=======
   mergeScan,
->>>>>>> b215b1fc6ccfeb287b3c7348b28824525d0d957b
   pluck,
   reduce,
   refCount,
@@ -57,6 +54,8 @@ import {
   throttleTime,
   withLatestFrom,
 } from "rxjs/operators";
+
+import { ObservableStore } from "./store";
 
 // api's
 const BASE_URL = "https://api.openbrewerydb.org/breweries";
@@ -449,15 +448,30 @@ setTimeout(() => {
 }, 0);
 
 // BehaviorSubject
-const subject = new BehaviorSubject("Hello");
+// const subject = new BehaviorSubject("Hello");
 
-const subscription = subject.subscribe(observer);
+// const subscription = subject.subscribe(observer);
 
+// const subscriptionTwo = subject.subscribe(observer);
 
-const subscriptionTwo = subject.subscribe(observer);
+// subject.next("World");
 
-subject.next("World");
+// setTimeout(() => {
+//   subject.subscribe(observer);
+// }, 3000);
 
-setTimeout(() => {
-  subject.subscribe(observer);
-}, 3000);
+// Observable Store
+const store = new ObservableStore({
+  user: "brian",
+  isAuthenticated: false,
+});
+
+store.selectState("user").subscribe(console.log);
+
+store.updateState({
+  user: "joe",
+});
+
+store.updateState({
+  isAuthenticated: true,
+});

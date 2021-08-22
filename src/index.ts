@@ -504,8 +504,8 @@ const clickReq$ = click$.pipe(mergeMapTo(ajax$), shareReplay(1, 10000));
 // AsyncSubject
 const asyncSubject = new AsyncSubject();
 
-asyncSubject.subscribe(observer);
-asyncSubject.subscribe(observer);
+// asyncSubject.subscribe(observer);
+// asyncSubject.subscribe(observer);
 
 asyncSubject.next("Hello");
 asyncSubject.next("World");

@@ -18,6 +18,7 @@ import {
   asapScheduler,
   range,
   animationFrameScheduler,
+  queueScheduler,
 } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import { MulticastOperator } from "rxjs/internal/operators/multicast";
@@ -537,7 +538,20 @@ of(4, 5, 6).pipe(
 // Promise.resolve("from promise").then(console.log);
 const counter = document.getElementById("counter");
 // don't use asapScheduler
-range(1, 100, animationFrameScheduler).subscribe((val) => {
-  counter.innerHTML = val + "";
+range(1, 100, animationFrameScheduler);
+//   .subscribe((val) => {
+//   counter.innerHTML = val + "";
+// });
+// console.log("sync console log");
+
+// QueueScheduler
+queueScheduler.schedule(() => {
+  queueScheduler.schedule(() => {
+    queueScheduler.schedule(() => {
+      console.log("second inner queue");
+    });
+    console.log("first inner queue");
+  });
+  console.log("first queue");
 });
-console.log("sync console log");
+console.log("sync");

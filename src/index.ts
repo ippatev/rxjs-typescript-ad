@@ -13,6 +13,7 @@ import {
   combineLatest,
   forkJoin,
   BehaviorSubject,
+  ReplaySubject,
 } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import { MulticastOperator } from "rxjs/internal/operators/multicast";
@@ -410,11 +411,13 @@ forkJoin({
 
 // Subjects & Multicast & share & refCount
 // const subject = new Subject();
+
 const observer = {
   next: (val) => console.log(val),
   err: (err) => console.error(err),
   complete: () => console.log("complete!"),
 };
+
 // const subscription = subject.subscribe(observer);
 
 // subject.next("Hello");
@@ -466,7 +469,7 @@ const store = new ObservableStore({
   isAuthenticated: false,
 });
 
-store.selectState("user").subscribe(console.log);
+// store.selectState("user").subscribe(console.log);
 
 store.updateState({
   user: "joe",
@@ -475,3 +478,12 @@ store.updateState({
 store.updateState({
   isAuthenticated: true,
 });
+
+// ReplySubject
+const subject = new ReplaySubject(1);
+
+subject.next("Hello");
+subject.next("World");
+subject.next("Goodbye");
+
+// subject.subscribe(observer);

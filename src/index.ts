@@ -14,6 +14,7 @@ import {
   forkJoin,
   BehaviorSubject,
   ReplaySubject,
+  AsyncSubject,
 } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import { MulticastOperator } from "rxjs/internal/operators/multicast";
@@ -493,9 +494,21 @@ subject.next("Goodbye");
 const ajax$ = ajax(`https://api.github.com/users/octocat`);
 const clickReq$ = click$.pipe(mergeMapTo(ajax$), shareReplay(1, 10000));
 
-clickReq$.subscribe(observer);
+// clickReq$.subscribe(observer);
 
-setTimeout(() => {
-  console.log("subscribing...");
-  clickReq$.subscribe(observer);
-}, 5000);
+// setTimeout(() => {
+//   console.log("subscribing...");
+//   clickReq$.subscribe(observer);
+// }, 5000);
+
+// AsyncSubject
+const asyncSubject = new AsyncSubject();
+
+asyncSubject.subscribe(observer);
+asyncSubject.subscribe(observer);
+
+asyncSubject.next("Hello");
+asyncSubject.next("World");
+asyncSubject.next("Goodbye");
+
+asyncSubject.complete();

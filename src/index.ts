@@ -15,6 +15,9 @@ import {
   BehaviorSubject,
   ReplaySubject,
   AsyncSubject,
+  asapScheduler,
+  range,
+  animationFrameScheduler,
 } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import { MulticastOperator } from "rxjs/internal/operators/multicast";
@@ -57,6 +60,8 @@ import {
   withLatestFrom,
   mergeMapTo,
   shareReplay,
+  observeOn,
+  subscribeOn,
 } from "rxjs/operators";
 
 import { ObservableStore } from "./store";
@@ -512,3 +517,27 @@ asyncSubject.next("World");
 asyncSubject.next("Goodbye");
 
 asyncSubject.complete();
+
+//AsyncScheduler
+// const sub = asyncScheduler.schedule(console.log, 2000, "Hello World");
+// sub.unsubscribe();
+of(4, 5, 6).pipe(
+  tap((val) => console.log("from tap ", val)),
+  subscribeOn(asyncScheduler, 3000)
+);
+// .subscribe(observer);
+
+// asyncScheduler.schedule(() => {
+//   console.log("asyncScheduler");
+// });
+// queueMicrotask(() => console.log("from microtask"));
+// asapScheduler.schedule(() => {
+//   console.log("asapScheduler");
+// });
+// Promise.resolve("from promise").then(console.log);
+const counter = document.getElementById("counter");
+// don't use asapScheduler
+range(1, 100, animationFrameScheduler).subscribe((val) => {
+  counter.innerHTML = val + "";
+});
+console.log("sync console log");

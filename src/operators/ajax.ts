@@ -6,13 +6,15 @@ const BASE_URL = 'https://jsonplaceholder.typicode.com';
 
 const todos$ = ajax.getJSON(`${BASE_URL}/todos`)
     .pipe(
-        tap((data) => {console.log('side effects with tap operator. ',data[0].userId)}),
+        tap((data) => {
+            console.log('side effects with tap operator. ', data[0].userId)
+        }),
         catchError((err) => of(err))
     )
 
 /**
  * @return ajax data model
-*/
+ */
 const users$ = ajax({
     responseType: 'GET',
     url: `${BASE_URL}/users`,

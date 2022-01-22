@@ -1,11 +1,7 @@
-import { todos$, users$ } from './operators/ajax'
+import {forkJoinExample$} from './operators'
 
-todos$.subscribe(todos => {
-    console.log('todos ',todos)
+forkJoinExample$.subscribe((x) => {
+    console.log(x)
+}, null, () => {
+    console.log('complete!')
 })
-
-users$.subscribe(req => {
-    console.log('users ', JSON.parse(req.response))
-})
-
-console.log('hello')

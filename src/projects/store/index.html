@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="progress-bar"></div>
+    <section style="margin: 20px">
+      <div id="counter"></div>
+      <input id="text-input" type="text" placeholder="text" />
+      <div id="typeahead-container"></div>
+    </section>
+    <section>
+      <div>
+        <input
+          type="radio"
+          class="radio-option"
+          name="operator"
+          value="mergeMap"
+        />
+        <label for="mergeMap">mergeMap </label>
+      </div>
+      <div>
+        <input
+          type="radio"
+          class="radio-option"
+          name="operator"
+          value="switchMap"
+        />
+        <label for="switchMap">switchMap</label>
+      </div>
+      <div>
+        <input
+          type="radio"
+          class="radio-option"
+          name="operator"
+          value="concatMap"
+        />
+        <label for="concatMap">concatMap</label>
+      </div>
+    </section>
+    <section>
+      <div class="form-group">
+        <label for="email"></label>
+        <input id="email" type="text" name="email" />
+      </div>
+      <div class="form-group">
+        <label for="passowrd"></label>
+        <input id="passwrod" type="password" name="password" />
+      </div>
+      <button id="login" type="button">Login</button>
+    </section>
+    <section>
+      <input type="number" id="first" />
+      <input type="number" id="second" />
+    </section>
+    <div style="height: 1000px">
+      <h2 id="countdown"></h2>
+      <div id="message"></div>
+    </div>
+    <div></div>
+  </body>
+
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      height: 20px;
+      width: 0%;
+      background: pink;
+      opacity: 0.5;
+    }
+  </style>
+</html>

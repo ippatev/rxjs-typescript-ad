@@ -2,6 +2,7 @@ import {defer, merge, of, timer} from 'rxjs'
 import {switchMap} from "rxjs/operators";
 
 const s1 = of(new Date());
+// defer, like lazy loading a observables.
 const s2 = defer(() => of(new Date()));
 
 console.log(new Date())

@@ -151,7 +151,7 @@ counter$.pipe(
 );
 // .subscribe((v) => {
 //   countdown.innerHTML = `${v}`;
-//   if (!v) {
+//   iif.ts (!v) {
 //     message.innerHTML = "Liftoff!";
 //   }
 // });
@@ -202,7 +202,7 @@ counter$.pipe(
 );
 // .subscribe((v) => {
 //   countdown.innerHTML = `${v}`;
-//   if (!v) {
+//   iif.ts (!v) {
 //     message.innerHTML = "Liftoff!";
 //   }
 // });

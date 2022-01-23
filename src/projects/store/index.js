@@ -27,7 +27,7 @@ const login$ = (0, rxjs_1.fromEvent)(loginButton, "click");
 const progress$ = scroll$.pipe((0, operators_1.throttleTime)(30, rxjs_1.asyncScheduler, {
     leading: false,
     trailing: true,
-}), 
+}),
 // percent-progress
 (0, operators_1.map)(({ target }) => calculateScrollPercent(target.documentElement)), (0, operators_1.tap)(console.log));
 progress$.subscribe((percent) => {
@@ -64,7 +64,7 @@ counter$.pipe((0, operators_1.mapTo)(-1), (0, operators_1.scan)((acc, current) =
 }, 10), (0, operators_1.tap)(console.log), (0, operators_1.filter)((v) => v >= 0));
 // .subscribe((v) => {
 //   countdown.innerHTML = `${v}`;
-//   if (!v) {
+//   iif.ts (!v) {
 //     message.innerHTML = "Liftoff!";
 //   }
 // });
@@ -78,7 +78,7 @@ counter$.pipe((0, operators_1.mapTo)(-1), (0, operators_1.scan)((acc, current) =
 click$.pipe((0, operators_1.map)((event) => ({
     x: event.clientX,
     y: event.clientY,
-})), 
+})),
 // filter, take(1)
 (0, operators_1.first)(({ y }) => y > 200));
 // .subscribe({
@@ -100,7 +100,7 @@ counter$.pipe((0, operators_1.mapTo)(-1), (0, operators_1.tap)(console.log), (0,
 }, 6), (0, operators_1.takeWhile)((v) => v >= 0));
 // .subscribe((v) => {
 //   countdown.innerHTML = `${v}`;
-//   if (!v) {
+//   iif.ts (!v) {
 //     message.innerHTML = "Liftoff!";
 //   }
 // });

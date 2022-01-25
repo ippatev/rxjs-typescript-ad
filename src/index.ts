@@ -1,5 +1,9 @@
-import { zipUser$ } from './operators/zip'
+import { clicksAudit$, clicksAuditWithInterval$ } from './operators'
 
-zipUser$.subscribe(user => {
-    console.log(user)
+clicksAudit$.subscribe(event => {
+    console.log(event)
+})
+
+clicksAuditWithInterval$.subscribe(event => {
+    console.log(event)
 })

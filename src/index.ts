@@ -1,5 +1,11 @@
-import { bufferTime$ } from './operators'
+import { concatAll$, concatAllWithThreeSubs$ } from './operators'
 
-bufferTime$.subscribe(event => {
+/*
+concatAll$.subscribe((event) => {
+    console.log(event)
+})
+ */
+
+concatAllWithThreeSubs$.subscribe(event => {
     console.log(event)
 })

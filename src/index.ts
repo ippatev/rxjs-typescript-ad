@@ -1,9 +1,5 @@
-import { clicksAudit$, clicksAuditWithInterval$ } from './operators'
+import { bufferTime$ } from './operators'
 
-clicksAudit$.subscribe(event => {
-    console.log(event)
-})
-
-clicksAuditWithInterval$.subscribe(event => {
+bufferTime$.subscribe(event => {
     console.log(event)
 })

@@ -1,17 +1,20 @@
-import { firstOrSecond, nums$, error$, timer$ } from './operators'
+import { clicksOrTimer$, merged$ } from './operators/merge'
+import {ofArr$, ofNums$} from "./operators/of";
 
-firstOrSecond(false).subscribe((x) => {
-    console.log('x is', x)
+/*
+clicksOrTimer$.subscribe(event => {
+    console.log(event)
+})
+ */
+
+merged$.subscribe(event => {
+    console.log(event)
 })
 
-nums$.subscribe((x) => {
-    console.log('num ', x)
+ofNums$.subscribe(num => {
+    console.log(num)
 })
 
-error$.subscribe(err => {
-    console.info(err)
-})
-
-timer$.subscribe((x) => {
-    console.log('timer ', x)
+ofArr$.subscribe(arr => {
+    console.log(arr)
 })

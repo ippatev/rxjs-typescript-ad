@@ -1,20 +1,5 @@
-import { clicksOrTimer$, merged$ } from './operators/merge'
-import {ofArr$, ofNums$} from "./operators/of";
+import { zipUser$ } from './operators/zip'
 
-/*
-clicksOrTimer$.subscribe(event => {
-    console.log(event)
-})
- */
-
-merged$.subscribe(event => {
-    console.log(event)
-})
-
-ofNums$.subscribe(num => {
-    console.log(num)
-})
-
-ofArr$.subscribe(arr => {
-    console.log(arr)
+zipUser$.subscribe(user => {
+    console.log(user)
 })

@@ -1,7 +1,9 @@
-import {  ignoreWords$ } from './operators'
+import {mapInNums$, mapToTheClicks$} from './operators'
 
-ignoreWords$.subscribe(x => {
+mapInNums$.subscribe(x => {
     console.log(x)
-}, err => console.error(err), () => {
-    console.log('hi, my name is Complete John!')
+})
+
+mapToTheClicks$.subscribe(x => {
+    console.log(x)
 })

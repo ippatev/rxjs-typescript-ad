@@ -1,4 +1,4 @@
-import {intervalWithAnimationFrame$, intervalWithAsync$} from './operators'
+import {intervalWithAnimationFrame$, intervalWithAsync$, intervalWithPairwise$, userWithPluck$} from './operators'
 import {concat} from "rxjs";
 
 /*
@@ -17,6 +17,14 @@ concat(
     intervalWithAnimationFrame$,
     intervalWithAsync$
 ).subscribe(x => {
-    console.log(x)
+    /* console.log(x) */
     msgElement.textContent = x.toString();
+})
+
+intervalWithPairwise$.subscribe(x => {
+    console.log(x)
+})
+
+userWithPluck$.subscribe(x => {
+    console.log(x)
 })

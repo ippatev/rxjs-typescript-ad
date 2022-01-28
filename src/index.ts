@@ -1,13 +1,5 @@
-import {distinctArr$, distinctObj$, distinctUntilChangedArr$, distinctUntilChangedObjs$} from './operators'
+import { personsWithDistinctUntilKeyChanged$ } from './operators'
 
-distinctArr$.subscribe((x) => {
-    console.log(x)
-})
-
-distinctObj$.subscribe(x => {
-    console.log(x)
-})
-
-distinctUntilChangedObjs$.subscribe(x => {
+personsWithDistinctUntilKeyChanged$.subscribe(x => {
     console.log(x)
 })

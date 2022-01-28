@@ -1,5 +1,5 @@
-import { personsWithDistinctUntilKeyChanged$ } from './operators'
+import { ticker$ } from './operators'
 
-personsWithDistinctUntilKeyChanged$.subscribe(x => {
+ticker$.subscribe((x) => {
     console.log(x)
 })

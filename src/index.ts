@@ -1,5 +1,7 @@
-import { ticker$ } from './operators'
+import {  ignoreWords$ } from './operators'
 
-ticker$.subscribe((x) => {
+ignoreWords$.subscribe(x => {
     console.log(x)
+}, err => console.error(err), () => {
+    console.log('hi, my name is Complete John!')
 })

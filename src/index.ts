@@ -1,11 +1,13 @@
-import { concatAll$, concatAllWithThreeSubs$ } from './operators'
+import {distinctArr$, distinctObj$, distinctUntilChangedArr$, distinctUntilChangedObjs$} from './operators'
 
-/*
-concatAll$.subscribe((event) => {
-    console.log(event)
+distinctArr$.subscribe((x) => {
+    console.log(x)
 })
- */
 
-concatAllWithThreeSubs$.subscribe(event => {
-    console.log(event)
+distinctObj$.subscribe(x => {
+    console.log(x)
+})
+
+distinctUntilChangedObjs$.subscribe(x => {
+    console.log(x)
 })

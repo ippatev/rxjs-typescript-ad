@@ -1,9 +1,22 @@
-import {mapInNums$, mapToTheClicks$} from './operators'
+import {intervalWithAnimationFrame$, intervalWithAsync$} from './operators'
+import {concat} from "rxjs";
 
-mapInNums$.subscribe(x => {
-    console.log(x)
+/*
+intervalWithAnimationFrame$.subscribe(x => {
+    console.log('animation frame ', x)
 })
 
-mapToTheClicks$.subscribe(x => {
+intervalWithAsync$.subscribe(x => {
+    console.log('async ', x)
+})
+ */
+
+const msgElement: HTMLHeadElement = document.getElementById('msg') as HTMLHeadElement
+
+concat(
+    intervalWithAnimationFrame$,
+    intervalWithAsync$
+).subscribe(x => {
     console.log(x)
+    msgElement.textContent = x.toString();
 })

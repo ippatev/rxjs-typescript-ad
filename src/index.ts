@@ -4,7 +4,7 @@ import {
     reduceClicks$,
     retryInterval$, routeEnd$, sampleTimer$,
     scanClicks$,
-    scanSubject$, sharedTimer$, singleName$, singleNameNotFound$, singleNameSeq$, subject$
+    scanSubject$, sharedTimer$, singleName$, singleNameNotFound$, singleNameSeq$, skipThreeValuesInInterval$, subject$
 } from './operators'
 import {concat} from "rxjs";
 
@@ -40,19 +40,7 @@ sampleTimer$.subscribe(x => {
 })
  */
 
-const sampleUrl = {
-    data: {},
-    url: 'https://localhost'
-}
-
-
-lastUrl$.subscribe(x => {
-    console.log(x)
-})
-
-routeEnd$.next(sampleUrl)
-
-lastUrl$.subscribe(x => {
+skipThreeValuesInInterval$.subscribe(x => {
     console.log(x)
 })
 

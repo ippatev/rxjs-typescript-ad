@@ -1,10 +1,10 @@
 import {
     intervalWithAnimationFrame$,
-    intervalWithAsync$,
+    intervalWithAsync$, lastUrl$,
     reduceClicks$,
-    retryInterval$,
+    retryInterval$, routeEnd$, sampleTimer$,
     scanClicks$,
-    scanSubject$, singleName$, singleNameNotFound$, singleNameSeq$, subject$
+    scanSubject$, sharedTimer$, singleName$, singleNameNotFound$, singleNameSeq$, subject$
 } from './operators'
 import {concat} from "rxjs";
 
@@ -30,15 +30,29 @@ concat(
 
 /* ---- START ---- */
 
-singleName$.subscribe(x => {
+/*
+sampleTimer$.subscribe(x => {
     console.log(x)
 })
 
-singleNameSeq$.subscribe(null,  x => {
-    console.error(x)
+sampleTimer$.subscribe(x => {
+    console.log(x)
+})
+ */
+
+const sampleUrl = {
+    data: {},
+    url: 'https://localhost'
+}
+
+
+lastUrl$.subscribe(x => {
+    console.log(x)
 })
 
-singleNameNotFound$.subscribe(x => {
+routeEnd$.next(sampleUrl)
+
+lastUrl$.subscribe(x => {
     console.log(x)
 })
 

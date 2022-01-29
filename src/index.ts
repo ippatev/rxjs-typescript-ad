@@ -4,7 +4,7 @@ import {
     lastUrl$,
     reduceClicks$,
     retryInterval$,
-    routeEnd$,
+    routeEnd$, sampleSubject$,
     sampleTimer$,
     scanClicks$,
     scanSubject$,
@@ -14,7 +14,7 @@ import {
     singleNameSeq$,
     skipThreeValuesInInterval$,
     startWithInterval$,
-    subject$, subscribeOnAB$
+    subject$, subscribeOnAB$, switchIntervalWhenClick$, takeOneNum$, takeThreeNumsToArr$, takeUntilInterval$, tapNums$
 } from './operators'
 import {concat} from "rxjs";
 
@@ -50,8 +50,10 @@ sampleTimer$.subscribe(x => {
 })
  */
 
-subscribeOnAB$.subscribe(x => {
+takeThreeNumsToArr$.subscribe(x => {
     console.log(x)
+}, null, () => {
+    console.log('hi, my name is Complete John!')
 })
 
 /* ---- END ---- */

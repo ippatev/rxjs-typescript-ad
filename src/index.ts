@@ -1,4 +1,11 @@
-import {intervalWithAnimationFrame$, intervalWithAsync$, intervalWithPairwise$, userWithPluck$} from './operators'
+import {
+    intervalWithAnimationFrame$,
+    intervalWithAsync$,
+    reduceClicks$,
+    retryInterval$,
+    scanClicks$,
+    scanSubject$, subject$
+} from './operators'
 import {concat} from "rxjs";
 
 /*
@@ -21,10 +28,18 @@ concat(
     msgElement.textContent = x.toString();
 })
 
-intervalWithPairwise$.subscribe(x => {
+reduceClicks$.subscribe(x => {
     console.log(x)
 })
 
-userWithPluck$.subscribe(x => {
+scanClicks$.subscribe(x => {
     console.log(x)
 })
+
+scanSubject$.subscribe(x => {
+    console.log(x)
+})
+
+subject$.next({id: 0})
+subject$.next({name: 'Pupkin'})
+subject$.next({age: 42})

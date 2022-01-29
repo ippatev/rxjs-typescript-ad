@@ -4,7 +4,7 @@ import {
     reduceClicks$,
     retryInterval$,
     scanClicks$,
-    scanSubject$, subject$
+    scanSubject$, singleName$, singleNameNotFound$, singleNameSeq$, subject$
 } from './operators'
 import {concat} from "rxjs";
 
@@ -28,18 +28,18 @@ concat(
     msgElement.textContent = x.toString();
 })
 
-reduceClicks$.subscribe(x => {
+/* ---- START ---- */
+
+singleName$.subscribe(x => {
     console.log(x)
 })
 
-scanClicks$.subscribe(x => {
+singleNameSeq$.subscribe(null,  x => {
+    console.error(x)
+})
+
+singleNameNotFound$.subscribe(x => {
     console.log(x)
 })
 
-scanSubject$.subscribe(x => {
-    console.log(x)
-})
-
-subject$.next({id: 0})
-subject$.next({name: 'Pupkin'})
-subject$.next({age: 42})
+/* ---- END ---- */

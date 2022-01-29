@@ -1,10 +1,20 @@
 import {
     intervalWithAnimationFrame$,
-    intervalWithAsync$, lastUrl$,
+    intervalWithAsync$,
+    lastUrl$,
     reduceClicks$,
-    retryInterval$, routeEnd$, sampleTimer$,
+    retryInterval$,
+    routeEnd$,
+    sampleTimer$,
     scanClicks$,
-    scanSubject$, sharedTimer$, singleName$, singleNameNotFound$, singleNameSeq$, skipThreeValuesInInterval$, subject$
+    scanSubject$,
+    sharedTimer$,
+    singleName$,
+    singleNameNotFound$,
+    singleNameSeq$,
+    skipThreeValuesInInterval$,
+    startWithInterval$,
+    subject$, subscribeOnAB$
 } from './operators'
 import {concat} from "rxjs";
 
@@ -40,7 +50,7 @@ sampleTimer$.subscribe(x => {
 })
  */
 
-skipThreeValuesInInterval$.subscribe(x => {
+subscribeOnAB$.subscribe(x => {
     console.log(x)
 })
 
